@@ -6,4 +6,8 @@ class User < ApplicationRecord
 
  has_many :group_reliationships
  has_many :participated_groups, :through => :group_reliationships, :source => :group
+
+  def is_memder_of?(group)
+    participated_groups.include?(group)
+  end
 end
