@@ -20,6 +20,7 @@ class GroupsController < ApplicationController
     @group.user = current_user
 
     if @group.save
+      current_user.join!(@group)
       redirect_to groups_path
     else
       render :new
@@ -46,6 +47,31 @@ class GroupsController < ApplicationController
     @group.destroy
     flash[:alert] = "Group deleted"
     redirect_to groups_path
+  end
+
+  def join
+    @group = Group.find(params[:id])
+
+    if !current_user.is_member_of?(@group)
+      current_user.join!(@group)
+      flash[:notice] = "成功加入帮派！"
+    else
+      flash[:warning] = "你已经是自己人了！"
+    end
+
+    redirect_to group_path(@group)
+  end
+
+  def quit
+    @group = Group.find(params[:id])
+
+    if current_user.is_member_of?(@group)
+      current_user.quit!(@group)
+      flash[:alert] = "已经退出帮派！"
+    else
+      flash[:warning] = "你不是自己人，进来再说。"
+    end
+    redirect_to group_path(@group)
   end
 
   private

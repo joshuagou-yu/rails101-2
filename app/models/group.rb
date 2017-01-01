@@ -4,5 +4,5 @@ class Group < ActiveRecord::Base
  validates :title, presence: true
 
  has_many :group_reliationships
- has_many :memder, through: :group_reliationships, source: :user
+ has_many :members, through: :group_reliationships, source: :user
 end
